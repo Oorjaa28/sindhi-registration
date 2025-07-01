@@ -1,13 +1,13 @@
-<h2>Registered Entries</h2>
-<table border="1">
+<h2>Registered Sindhi Members</h2>
+<table border="1" style="margin: auto; font-family: sans-serif;">
   <tr>
-    <th>Title</th><th>Name</th><th>Gender</th><th>Father</th><th>Mother</th><th>DOB</th><th>Email</th><th>Code</th><th>Mobile</th><th>Aadhaar</th><th>Occupation</th><th>Address</th><th>Category</th>
+    <th>Name</th>
+    <th>Sindhi Category</th>
   </tr>
   {% for row in entries %}
-    <tr>
-      {% for item in row %}
-        <td>{{ item }}</td>
-      {% endfor %}
-    </tr>
+  <tr>
+    <td>{{ row.name }}</td>
+    <td>{{ row.category }}</td>
+  </tr>
   {% endfor %}
 </table>

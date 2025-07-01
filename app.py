@@ -46,13 +46,15 @@ def submit():
 @app.route('/view')
 def view():
     entries = []
-    header = []
     if os.path.exists('registrations.csv'):
         with open('registrations.csv', newline='', encoding='utf-8') as csvfile:
-            reader = csv.reader(csvfile)
-            header = next(reader, [])
-            entries = list(reader)
-    return render_template('view.html', entries=entries, header=header)
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                entries.append({
+                    'name': f"{row['Title']} {row['Name']}",
+                    'category': row['Sindhi Category']
+                })
+    return render_template('view.html', entries=entries)
 
 # For Render deployment
 if __name__ == '__main__':

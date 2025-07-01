@@ -39,12 +39,12 @@
       </tr>
     </thead>
     <tbody>
-      {% for row in data %}
-      <tr>
-        <td>{{ row['title'] }} {{ row['name'] }}</td>
-        <td>{{ row['category'] }}</td>
-      </tr>
-      {% endfor %}
+      {% for row in people %}
+  <tr>
+    <td>{{ row[0] }} {{ row[1] }}</td>
+    <td>{{ row[2] }}</td>
+  </tr>
+{% endfor %}
     </tbody>
   </table>
 </body>

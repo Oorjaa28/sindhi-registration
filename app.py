@@ -1,8 +1,32 @@
 from flask import Flask, render_template, request, redirect
-import csv
+import sqlite3
 import os
 
 app = Flask(__name__)
+
+DB_FILE = "registrations.db"
+
+# Create table if it doesn't exist
+def init_db():
+    with sqlite3.connect(DB_FILE) as conn:
+        conn.execute('''
+            CREATE TABLE IF NOT EXISTS registrations (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT,
+                name TEXT,
+                gender TEXT,
+                father TEXT,
+                mother TEXT,
+                dob TEXT,
+                email TEXT,
+                code TEXT,
+                mobile TEXT,
+                aadhaar TEXT,
+                occupation TEXT,
+                address TEXT,
+                category TEXT
+            )
+        ''')
 
 @app.route('/')
 def index():
@@ -10,53 +34,41 @@ def index():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    # Get all form values
-    title = request.form['title']
-    name = request.form['name']
-    gender = request.form['gender']
-    father = request.form['father']
-    mother = request.form['mother']
-    dob = request.form['dob']
-    email = request.form['email']
-    code = request.form['code']
-    mobile = request.form['mobile']
-    aadhaar = request.form['aadhaar']
-    occupation = request.form['occupation']
-    address = request.form['address']
-    category = request.form.get('category', '')
-    other = request.form.get('other', '')
-    final_category = other if category == "Other" else category
+    # Get form data
+    data = (
+        request.form['title'],
+        request.form['name'],
+        request.form['gender'],
+        request.form['father'],
+        request.form['mother'],
+        request.form['dob'],
+        request.form['email'],
+        request.form['code'],
+        request.form['mobile'],
+        request.form['aadhaar'],
+        request.form['occupation'],
+        request.form['address'],
+        request.form['other'] if request.form['category'] == "Other" else request.form['category']
+    )
 
-    # Save to CSV
-    file_exists = os.path.isfile('registrations.csv')
-    with open('registrations.csv', 'a', newline='', encoding='utf-8') as csvfile:
-        writer = csv.writer(csvfile)
-        if not file_exists:
-            writer.writerow([
-                'Title', 'Name', 'Gender', 'Father', 'Mother', 'DOB', 'Email',
-                'Country Code', 'Mobile', 'Aadhaar', 'Occupation', 'Address', 'Sindhi Category'
-            ])
-        writer.writerow([
-            title, name, gender, father, mother, dob, email,
-            code, mobile, aadhaar, occupation, address, final_category
-        ])
+    # Save to database
+    with sqlite3.connect(DB_FILE) as conn:
+        conn.execute('''
+            INSERT INTO registrations (
+                title, name, gender, father, mother, dob, email, code, mobile, aadhaar, occupation, address, category
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', data)
 
     return render_template('thankyou.html')
 
 @app.route('/view')
 def view():
-    entries = []
-    if os.path.exists('registrations.csv'):
-        with open('registrations.csv', newline='', encoding='utf-8') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                entries.append({
-                    'name': f"{row['Title']} {row['Name']}",
-                    'category': row['Sindhi Category']
-                })
+    with sqlite3.connect(DB_FILE) as conn:
+        cursor = conn.execute('SELECT title, name, category FROM registrations')
+        entries = [{'name': f"{row[0]} {row[1]}", 'category': row[2]} for row in cursor]
     return render_template('view.html', entries=entries)
 
-# For Render deployment
 if __name__ == '__main__':
+    init_db()
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)

@@ -7,7 +7,6 @@
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
     body {
       font-family: 'Poppins', sans-serif;
       background: #e3eef6;
@@ -18,7 +17,6 @@
       align-items: flex-start;
       min-height: 100vh;
     }
-
     .container {
       background: #ffffff;
       width: 90%;
@@ -29,28 +27,17 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
       border: 1px solid #c6c7c8;
     }
-
-    .top-image {
-      display: block;
-      margin: 0 auto 20px auto;
-      width: 120px;
-      height: auto;
-      border-radius: 8px;
-    }
-
     h1, h2 {
       text-align: center;
       color: #51433a;
       margin-bottom: 10px;
     }
-
     .form-group {
       display: flex;
       gap: 20px;
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
-
     .form-group input,
     .form-group select {
       flex: 1;
@@ -61,18 +48,15 @@
       background-color: #f9f9f9;
       color: #333;
     }
-
     .form-group input:focus,
     .form-group select:focus {
       outline: none;
       border-color: #8a9c76;
       background-color: #ffffff;
     }
-
     #otherCategory {
       display: none;
     }
-
     button {
       width: 100%;
       padding: 14px;
@@ -84,33 +68,19 @@
       cursor: pointer;
       transition: 0.3s;
     }
-
     button:hover {
       background-color: #5d8cd3;
     }
   </style>
-
-  <script>
-    function toggleOther(select) {
-      const otherInput = document.getElementById('otherCategory');
-      if (select.value === 'Other') {
-        otherInput.style.display = 'block';
-      } else {
-        otherInput.style.display = 'none';
-      }
-    }
-  </script>
 </head>
 <body>
   <div class="container">
-    <!-- You can replace the image path with a web URL or static file -->
-    <img src="{{ url_for('static', filename='jhulelalji.jpg') }}" alt="Jhulelalji Image" class="top-image"/>
-
     <h1>झूलेलाल सिंधी सारथी – उदयपुर विशेषांक</h1>
     <h2>अपनी संस्कृति, अपनी पहचान</h2>
     <h2 style="font-size: 18px; font-weight:500;">Please fill in the details below</h2>
 
     <form action="/submit" method="POST">
+      <!-- Title, Name, Gender -->
       <div class="form-group">
         <select name="title" required>
           <option value="">Title</option>
@@ -127,30 +97,36 @@
         </select>
       </div>
 
+      <!-- Father & Mother Name -->
       <div class="form-group">
         <input type="text" name="father" placeholder="Father's Name" required />
         <input type="text" name="mother" placeholder="Mother's Name" required />
       </div>
 
+      <!-- DOB & Email -->
       <div class="form-group">
-        <input type="date" name="dob" required />
+        <input type="date" name="dob" placeholder="Date of Birth" required />
         <input type="email" name="email" placeholder="Email" required />
       </div>
 
+      <!-- Country Code & Mobile -->
       <div class="form-group">
         <input type="text" name="code" placeholder="Country Code (e.g., +91)" maxlength="5" required />
-        <input type="text" name="mobile" placeholder="Mobile Number" maxlength="10" pattern="[0-9]{10}" required />
+        <input type="text" name="mobile" placeholder="Mobile Number" maxlength="10" pattern="\d{10}" required />
       </div>
 
+      <!-- Aadhaar & Occupation -->
       <div class="form-group">
-        <input type="text" name="aadhaar" placeholder="Aadhaar Number" maxlength="12" pattern="[0-9]{12}" required />
+        <input type="text" name="aadhaar" placeholder="Aadhaar Number" maxlength="12" pattern="\d{12}" required />
         <input type="text" name="occupation" placeholder="Occupation" required />
       </div>
 
+      <!-- Address -->
       <div class="form-group">
         <input type="text" name="address" placeholder="Address" required />
       </div>
 
+      <!-- Sindhi Category -->
       <div class="form-group">
         <select name="category" id="category" onchange="toggleOther(this)" required>
           <option value="">Sindhi Sub-Category</option>
@@ -161,11 +137,22 @@
           <option>Ladkhana</option>
           <option value="Other">Other</option>
         </select>
-        <input type="text" name="otherCategory" id="otherCategory" placeholder="Specify Other Category"/>
+        <input type="text" name="other" id="otherCategory" placeholder="Specify Other Category" />
       </div>
 
       <button type="submit">Submit</button>
     </form>
   </div>
+
+  <script>
+    function toggleOther(select) {
+      const otherInput = document.getElementById('otherCategory');
+      if (select.value === 'Other') {
+        otherInput.style.display = 'block';
+      } else {
+        otherInput.style.display = 'none';
+      }
+    }
+  </script>
 </body>
 </html>

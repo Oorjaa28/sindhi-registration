@@ -6,8 +6,8 @@ app = Flask(__name__)
 
 DB_FILE = "registrations.db"
 
-# Create table if it doesn't exist
 def init_db():
+    print("✅ Creating database and table if not exists...")
     with sqlite3.connect(DB_FILE) as conn:
         conn.execute('''
             CREATE TABLE IF NOT EXISTS registrations (
@@ -69,11 +69,7 @@ def view():
     return render_template('view.html', entries=entries)
 
 if __name__ == '__main__':
-    init_db()
+    init_db()  # this creates the database and table
+    import os
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
-
-if __name__ == '__main__':
-    init_db()  # ✅ Creates the database if it doesn't exist
-    ...
-

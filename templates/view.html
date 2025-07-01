@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Registered People</title>
-</head>
-<body>
-  <h2>Registered People</h2>
-  <ul>
-    {% for person in people %}
-      <li>{{ person.fullName }} — {{ person.category }}</li>
-    {% endfor %}
-  </ul>
-  <a href="/">Submit another response</a>
-</body>
-</html>
+<h2>Registered Entries</h2>
+<table border="1">
+  <tr>
+    <th>Title</th><th>Name</th><th>Gender</th><th>Father</th><th>Mother</th><th>DOB</th><th>Email</th><th>Code</th><th>Mobile</th><th>Aadhaar</th><th>Occupation</th><th>Address</th><th>Category</th>
+  </tr>
+  {% for row in entries %}
+    <tr>
+      {% for item in row %}
+        <td>{{ item }}</td>
+      {% endfor %}
+    </tr>
+  {% endfor %}
+</table>

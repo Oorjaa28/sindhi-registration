@@ -1,63 +1,60 @@
-# app.py
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect
 import csv
 import os
 
 app = Flask(__name__)
 
-DATA_FILE = 'registrations.csv'
-
 @app.route('/')
-def form():
+def index():
     return render_template('form.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    title = request.form.get('title')
-    name = request.form.get('name').strip()
-    gender = request.form.get('gender')
-    father = request.form.get('father')
-    mother = request.form.get('mother')
-    dob = request.form.get('dob')
-    email = request.form.get('email')
-    code = request.form.get('code')
-    mobile = request.form.get('mobile')
-    aadhaar = request.form.get('aadhaar')
-    occupation = request.form.get('occupation')
-    address = request.form.get('address')
-    category = request.form.get('category')
-    other = request.form.get('otherCategory')
+    # Get all form values
+    title = request.form['title']
+    name = request.form['name']
+    gender = request.form['gender']
+    father = request.form['father']
+    mother = request.form['mother']
+    dob = request.form['dob']
+    email = request.form['email']
+    code = request.form['code']
+    mobile = request.form['mobile']
+    aadhaar = request.form['aadhaar']
+    occupation = request.form['occupation']
+    address = request.form['address']
+    category = request.form.get('category', '')
+    other = request.form.get('other', '')
+    final_category = other if category == "Other" else category
 
-    category_value = other if category == 'Other' else category
+    # Save to CSV
+    file_exists = os.path.isfile('registrations.csv')
+    with open('registrations.csv', 'a', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        if not file_exists:
+            writer.writerow([
+                'Title', 'Name', 'Gender', 'Father', 'Mother', 'DOB', 'Email',
+                'Country Code', 'Mobile', 'Aadhaar', 'Occupation', 'Address', 'Sindhi Category'
+            ])
+        writer.writerow([
+            title, name, gender, father, mother, dob, email,
+            code, mobile, aadhaar, occupation, address, final_category
+        ])
 
-    if not os.path.exists(DATA_FILE):
-        with open(DATA_FILE, 'w', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f)
-            writer.writerow(['Title', 'Name', 'Gender', 'Father', 'Mother', 'DOB', 'Email', 'Code', 'Mobile', 'Aadhaar', 'Occupation', 'Address', 'Category'])
-
-    with open(DATA_FILE, 'a', newline='', encoding='utf-8') as f:
-        writer = csv.writer(f)
-        writer.writerow([title, name, gender, father, mother, dob, email, code, mobile, aadhaar, occupation, address, category_value])
-
-    return redirect(url_for('thank_you'))
-
-@app.route('/thank-you')
-def thank_you():
     return render_template('thankyou.html')
 
 @app.route('/view')
 def view():
-    people = []
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, newline='', encoding='utf-8') as f:
-            reader = csv.reader(f)
-            next(reader)  # skip header
-            for row in reader:
-                people.append({'fullName': f"{row[0]} {row[1]}", 'category': row[-1]})
-    return render_template('view.html', people=people)
+    entries = []
+    header = []
+    if os.path.exists('registrations.csv'):
+        with open('registrations.csv', newline='', encoding='utf-8') as csvfile:
+            reader = csv.reader(csvfile)
+            header = next(reader, [])
+            entries = list(reader)
+    return render_template('view.html', entries=entries, header=header)
 
-import os
-
+# For Render deployment
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)

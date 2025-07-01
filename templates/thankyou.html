@@ -1,11 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Thank You</title>
+  <meta charset="UTF-8">
+  <title>धन्यवाद</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f3f8fc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .box {
+      text-align: center;
+      background: white;
+      padding: 50px;
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      font-size: 28px;
+      color: #265077;
+    }
+    .buttons {
+      margin-top: 30px;
+    }
+    .buttons a {
+      text-decoration: none;
+      padding: 12px 20px;
+      margin: 0 10px;
+      background-color: #7da6e3;
+      color: white;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .buttons a:hover {
+      background-color: #5d8cd3;
+    }
+  </style>
 </head>
 <body>
-  <h2 style="text-align:center;">Thank you for registering!</h2>
-<p style="text-align:center;"><a href="/">Submit another</a></p>
-<p style="text-align:center;"><a href="/view">View Registered Names</a></p>
+  <div class="box">
+    <h1>धन्यवाद! आपका प्राक्रम जमा हो चुका है!</h1>
+    <div class="buttons">
+      <a href="/view">दिखें मेंबर्स</a>
+      <a href="/panchayat">पंचायत सदस्य</a>
+    </div>
+  </div>
 </body>
 </html>

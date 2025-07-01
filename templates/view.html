@@ -1,10 +1,51 @@
-<h2>Registered Sindhi Members</h2>
-<table border="1" style="margin:auto; font-family:sans-serif;">
-  <tr><th>Name</th><th>Category</th></tr>
-  {% for row in entries %}
-  <tr>
-    <td>{{ row.name }}</td>
-    <td>{{ row.category }}</td>
-  </tr>
-  {% endfor %}
-</table>
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <title>नाम और वर्ग</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f7f9fc;
+      padding: 30px;
+    }
+    h1 {
+      text-align: center;
+      color: #263238;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 12px;
+      text-align: center;
+    }
+    th {
+      background-color: #7da6e3;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>नाम और सिंधी वर्ग</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>नाम</th>
+        <th>वर्ग</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in data %}
+      <tr>
+        <td>{{ row['title'] }} {{ row['name'] }}</td>
+        <td>{{ row['category'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

@@ -1,13 +1,13 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for, send_file
 import sqlite3
+import csv
 import os
 
 app = Flask(__name__)
+DB_FILE = 'registrations.db'
 
-DB_FILE = "registrations.db"
-
+# Initialize DB
 def init_db():
-    print("✅ Creating database and table if not exists...")
     with sqlite3.connect(DB_FILE) as conn:
         conn.execute('''
             CREATE TABLE IF NOT EXISTS registrations (
@@ -29,12 +29,11 @@ def init_db():
         ''')
 
 @app.route('/')
-def index():
+def form():
     return render_template('form.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    # Get form data
     data = (
         request.form['title'],
         request.form['name'],
@@ -48,15 +47,13 @@ def submit():
         request.form['aadhaar'],
         request.form['occupation'],
         request.form['address'],
-        request.form['other'] if request.form['category'] == "Other" else request.form['category']
+        request.form.get('category') or request.form.get('otherCategory')
     )
 
-    # Save to database
     with sqlite3.connect(DB_FILE) as conn:
         conn.execute('''
-            INSERT INTO registrations (
-                title, name, gender, father, mother, dob, email, code, mobile, aadhaar, occupation, address, category
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO registrations (title, name, gender, father, mother, dob, email, code, mobile, aadhaar, occupation, address, category)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', data)
 
     return render_template('thankyou.html')
@@ -64,12 +61,37 @@ def submit():
 @app.route('/view')
 def view():
     with sqlite3.connect(DB_FILE) as conn:
-        cursor = conn.execute('SELECT title, name, category FROM registrations')
-        entries = [{'name': f"{row[0]} {row[1]}", 'category': row[2]} for row in cursor]
+        cursor = conn.cursor()
+        cursor.execute("SELECT title, name, category FROM registrations")
+        entries = cursor.fetchall()
     return render_template('view.html', entries=entries)
 
+@app.route('/download')
+def download_csv():
+    filename = 'registrations_export.csv'
+    with sqlite3.connect(DB_FILE) as conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT title, name, category FROM registrations')
+        rows = cursor.fetchall()
+
+    with open(filename, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerow(['Title', 'Name', 'Category'])
+        writer.writerows(rows)
+
+    return send_file(filename, as_attachment=True)
+
+@app.route('/panchayat')
+def panchayat():
+    members = [
+        ['श्री झूलेलाल सेवा समिति', 'श्री प्रताप राय चूग', 'अध्यक्ष', '+91 9928058058'],
+        ['श्री झूलेलाल सेवा समिति', 'श्री मनोज कटारिया', 'महासचिव', '+91 9414263312'],
+        ['सिंधी सेंट्रल युवा सेवा समिति', 'श्री विजय आहूजा', 'अध्यक्ष', '+91 9982134777'],
+        ['सिंधी सेंट्रल युवा सेवा समिति', 'श्री मुकेश खिलवानी', 'महासचिव', '+91 9772734476']
+    ]
+    return render_template('panchayat.html', members=members)
+
 if __name__ == '__main__':
-    init_db()  # this creates the database and table
-    import os
+    init_db()
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)

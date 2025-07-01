@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>झूलेलाल सिंधी सारथी – उदयपुर विशेषांक</title>
-
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
     body {
       font-family: 'Poppins', sans-serif;
       background: #e3eef6;
@@ -25,7 +24,13 @@
       padding: 40px;
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-      border: 1px solid #c6c7c8;
+    }
+    .top-image {
+      display: block;
+      margin: 0 auto 20px auto;
+      width: 120px;
+      height: auto;
+      border-radius: 8px;
     }
     h1, h2 {
       text-align: center;
@@ -75,12 +80,10 @@
 </head>
 <body>
   <div class="container">
+    <img src="/static/jhulelalji.jpg" alt="Jhulelalji" class="top-image">
     <h1>झूलेलाल सिंधी सारथी – उदयपुर विशेषांक</h1>
     <h2>अपनी संस्कृति, अपनी पहचान</h2>
-    <h2 style="font-size: 18px; font-weight:500;">Please fill in the details below</h2>
-
-    <form action="/submit" method="POST">
-      <!-- Title, Name, Gender -->
+    <form method="POST">
       <div class="form-group">
         <select name="title" required>
           <option value="">Title</option>
@@ -88,7 +91,7 @@
           <option>Ms.</option>
           <option>Mrs.</option>
         </select>
-        <input type="text" name="name" placeholder="Name" required />
+        <input type="text" name="name" placeholder="Name" required>
         <select name="gender" required>
           <option value="">Gender</option>
           <option>Male</option>
@@ -96,39 +99,27 @@
           <option>Other</option>
         </select>
       </div>
-
-      <!-- Father & Mother Name -->
       <div class="form-group">
-        <input type="text" name="father" placeholder="Father's Name" required />
-        <input type="text" name="mother" placeholder="Mother's Name" required />
+        <input type="text" name="father_name" placeholder="Father's Name" required>
+        <input type="text" name="mother_name" placeholder="Mother's Name" required>
       </div>
-
-      <!-- DOB & Email -->
       <div class="form-group">
-        <input type="date" name="dob" placeholder="Date of Birth" required />
-        <input type="email" name="email" placeholder="Email" required />
+        <input type="date" name="dob" required>
+        <input type="email" name="email" placeholder="Email" required>
       </div>
-
-      <!-- Country Code & Mobile -->
       <div class="form-group">
-        <input type="text" name="code" placeholder="Country Code (e.g., +91)" maxlength="5" required />
-        <input type="text" name="mobile" placeholder="Mobile Number" maxlength="10" pattern="\d{10}" required />
+        <input type="text" name="country_code" placeholder="Country Code (e.g., +91)" maxlength="5" required>
+        <input type="text" name="mobile" placeholder="Mobile Number" maxlength="10" pattern="\d{10}" required>
       </div>
-
-      <!-- Aadhaar & Occupation -->
       <div class="form-group">
-        <input type="text" name="aadhaar" placeholder="Aadhaar Number" maxlength="12" pattern="\d{12}" required />
-        <input type="text" name="occupation" placeholder="Occupation" required />
+        <input type="text" name="aadhaar" placeholder="Aadhaar Number" maxlength="12" pattern="\d{12}" required>
+        <input type="text" name="occupation" placeholder="Occupation" required>
       </div>
-
-      <!-- Address -->
       <div class="form-group">
-        <input type="text" name="address" placeholder="Address" required />
+        <input type="text" name="address" placeholder="Address" required>
       </div>
-
-      <!-- Sindhi Category -->
       <div class="form-group">
-        <select name="category" id="category" onchange="toggleOther(this)" required>
+        <select name="category" onchange="toggleOther(this)" required>
           <option value="">Sindhi Sub-Category</option>
           <option>Bilochistan</option>
           <option>Jacobabad</option>
@@ -137,9 +128,8 @@
           <option>Ladkhana</option>
           <option value="Other">Other</option>
         </select>
-        <input type="text" name="other" id="otherCategory" placeholder="Specify Other Category" />
+        <input type="text" name="other_category" id="otherCategory" placeholder="Specify Other Category">
       </div>
-
       <button type="submit">Submit</button>
     </form>
   </div>
@@ -147,11 +137,7 @@
   <script>
     function toggleOther(select) {
       const otherInput = document.getElementById('otherCategory');
-      if (select.value === 'Other') {
-        otherInput.style.display = 'block';
-      } else {
-        otherInput.style.display = 'none';
-      }
+      otherInput.style.display = select.value === 'Other' ? 'block' : 'none';
     }
   </script>
 </body>

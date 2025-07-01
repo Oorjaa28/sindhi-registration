@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>झूलेलाल सिंधी सारथी – उदयपुर विशेषांक</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #e3eef6;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #ffffff;
+      width: 90%;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+      border: 1px solid #c6c7c8;
+    }
+
+    .top-image {
+      display: block;
+      margin: 0 auto 20px auto;
+      width: 120px;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #51433a;
+      margin-bottom: 10px;
+    }
+
+    .form-group {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .form-group input,
+    .form-group select {
+      flex: 1;
+      padding: 12px;
+      font-size: 14px;
+      border: 1px solid #c6c7c8;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #8a9c76;
+      background-color: #ffffff;
+    }
+
+    #otherCategory {
+      display: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: #7da6e3;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #5d8cd3;
+    }
+  </style>
+
+  <script>
+    function toggleOther(select) {
+      const otherInput = document.getElementById('otherCategory');
+      if (select.value === 'Other') {
+        otherInput.style.display = 'block';
+      } else {
+        otherInput.style.display = 'none';
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <!-- You can replace the image path with a web URL or static file -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Jhulelal_ji.jpg" alt="Jhulelalji Image" class="top-image"/>
+
+    <h1>झूलेलाल सिंधी सारथी – उदयपुर विशेषांक</h1>
+    <h2>अपनी संस्कृति, अपनी पहचान</h2>
+    <h2 style="font-size: 18px; font-weight:500;">Please fill in the details below</h2>
+
+    <form action="{{ url_for('submit') }}" method="POST">
+      <div class="form-group">
+        <select name="title" required>
+          <option value="">Title</option>
+          <option>Mr.</option>
+          <option>Ms.</option>
+          <option>Mrs.</option>
+        </select>
+        <input type="text" name="name" placeholder="Name" required />
+        <select name="gender" required>
+          <option value="">Gender</option>
+          <option>Male</option>
+          <option>Female</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <input type="text" name="father" placeholder="Father's Name" required />
+        <input type="text" name="mother" placeholder="Mother's Name" required />
+      </div>
+
+      <div class="form-group">
+        <input type="date" name="dob" required />
+        <input type="email" name="email" placeholder="Email" required />
+      </div>
+
+      <div class="form-group">
+        <input type="text" name="code" placeholder="Country Code (e.g., +91)" maxlength="5" required />
+        <input type="text" name="mobile" placeholder="Mobile Number" maxlength="10" pattern="\\d{10}" required />
+      </div>
+
+      <div class="form-group">
+        <input type="text" name="aadhaar" placeholder="Aadhaar Number" maxlength="12" pattern="\\d{12}" required />
+        <input type="text" name="occupation" placeholder="Occupation" required />
+      </div>
+
+      <div class="form-group">
+        <input type="text" name="address" placeholder="Address" required />
+      </div>
+
+      <div class="form-group">
+        <select name="category" id="category" onchange="toggleOther(this)" required>
+          <option value="">Sindhi Sub-Category</option>
+          <option>Bilochistan</option>
+          <option>Jacobabad</option>
+          <option>Khanpur</option>
+          <option>Sahiti</option>
+          <option>Ladkhana</option>
+          <option value="Other">Other</option>
+        </select>
+        <input type="text" name="otherCategory" id="otherCategory" placeholder="Specify Other Category"/>
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</body>
+</html>

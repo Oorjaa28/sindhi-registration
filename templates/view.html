@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registered People</title>
+</head>
+<body>
+  <h2>Registered People</h2>
+  <ul>
+    {% for person in people %}
+      <li>{{ person.fullName }} — {{ person.category }}</li>
+    {% endfor %}
+  </ul>
+  <a href="/">Submit another response</a>
+</body>
+</html>
